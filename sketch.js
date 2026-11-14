@@ -1,0 +1,69 @@
+await Canvas(800,450);
+world.gravity.y = 15;
+
+let score=0;	
+
+let player=new Sprite(0,-100,30,40);
+player.color='tomato';
+player.rotationLock=true;
+player.friction=0;
+player.img='😀';
+player.debug=true;
+
+let ground=new Group();
+ground.physics=STATIC;
+ground.color='green';
+ground.tile='=';
+ground.w=40;
+ground.h=40;
+
+let coins=new Group();
+	coins.physics=STATIC;
+	coins.diameter=16;
+	coins.color='gold';
+	coins.tile='c';
+
+let level=new Group();
+level.addTiles([
+	'............c...==......',
+	'.....====........c....===.....c',
+	'.c.........===...==...c......==',
+	'====...=========........=...=',
+	], -300,0,40,40);
+
+		player.overlaps(coins, collect)
+		function collect(p, coin) {
+		coin.delete();
+		score++;
+	}
+
+	q5.draw=function(){
+		background('skyblue');
+		camera.x=player.x;
+		textSize(24);
+		text('Score: '+score,-380,-190);
+
+		if (player.y > 400){
+			player.x=0;
+			player.y=-100;
+			player.vel.y=0;
+		}
+
+	}
+	q5.update=function(){
+		if(kb.pressing('left')){
+			player.vel.x=-4;
+		} else if(kb.pressing('right')){
+			player.vel.x=4;
+		} else {
+			player.vel.x=0;
+		}
+		let onGround=player.colliding(ground);
+		if(kb.presses('up') && onGround){
+			player.vel.y=-7;
+		}
+	}
+	
+
+	
+
